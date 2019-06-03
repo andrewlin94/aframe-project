@@ -32,18 +32,31 @@
                         if (notMovingTimer >= 6) {
                             // console.log('add fusing');
                             // console.log('add fusing2');
-                            document.getElementById('cursor').setAttribute('add-fusing', '');
+                            // document.getElementById('cursor').setAttribute('add-fusing', '');
+
                             // document.getElementById('box-2').removeAttribute('fade-out');
                             // document.getElementById('box-2').setAttribute('fade-in', '');
+
+                            if (
+                                document.getElementById('tl-ring').getAttribute('animation') == null &&
+                                document.getElementById('tr-ring').getAttribute('animation') == null &&
+                                document.getElementById('br-ring').getAttribute('animation') == null &&
+                                document.getElementById('bl-ring').getAttribute('animation') == null
+                            ) {
+                                console.log('no animation playing');
+                                document.getElementById('tl-ring').setAttribute('tl-ring-animation', '');
+                            } else {
+                                console.log('animation playing, please wait');
+                            }
                             notMovingTimer = 0;
                         }
                     } else {
                         console.log('moving');
                         ++movingTimer;
                         notMovingTimer = 0;
-                        document.getElementById('box-2').removeAttribute('fade-in');
                         // document.getElementById('cursor').removeAttribute('add-fusing');
                         if (movingTimer >= 2) {
+                            document.getElementById('box-2').removeAttribute('fade-in');
                             document.getElementById('box-2').setAttribute('fade-out', '');
                             movingTimer = 0;
                         }
@@ -187,8 +200,15 @@
                 this.el.addEventListener('click', () => {
                     // this.el.removeAttribute('cursor');
                     document.getElementById('tl-ring').setAttribute('tl-ring-animation', '');
+                    let position = new THREE.Vector3();
+                    let rotation = new THREE.Euler();
+                    position = document.getElementById('cursor').object3D.getWorldPosition(position);
+                    rotation = document.getElementById('cursor').object3D.rotation
+                    console.log(position);
+                    console.log(rotation);
+                    document.getElementById('test-plane').object3D.position.set(position.x, position.y, position.z);
                     // console.log('fused');
-                })
+                });
             },
             remove: function () {
                 console.log('remove add-fusing');
@@ -211,10 +231,10 @@
             <!-- <a-entity position="0 0 -1" geometry="primitive: ring; radiusOuter: 0.03; radiusInner: 0.02;"
                 material="color: black; shader: flat;" id="cursor">
             </a-entity> -->
-            <a-cursor id="cursor"></a-cursor>
+            <a-cursor id="cursor" raycaster="objects: .clickable"></a-cursor>
         </a-entity>
         <!-- Changing size of rings needs to re-adjust position also -->
-        <a-plane position="0 0 -1.01" material="color: red">
+        <a-plane position="0 0 -1.01" material="color: red" class="clickable">
             <a-ring id="tl-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1"
                 position="-0.015 0 0.05"></a-ring>
             <a-ring id="tr-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1"
@@ -231,7 +251,8 @@
         <!-- <a-box id="box" position="-1 0.5 -3" rotation="0 45 0" color="blue" shadow visible="false"></a-box> -->
         <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" shadow></a-sphere>
         <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+        <a-plane position="0 0 -1" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+        <a-plane id="test-plane" position="0 0 0" rotation="0 0 0" width="0.1" height="0.1" color="#7BC8A4" shadow></a-plane>
     </a-scene>
     <script>
             document.addEventListener('keydown', (e) => {
