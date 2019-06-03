@@ -31,8 +31,10 @@
                         movingTimer = 0;
                         if (notMovingTimer >= 6) {
                             // console.log('add fusing');
-                            document.getElementById('box-2').removeAttribute('fade-out');
-                            document.getElementById('box-2').setAttribute('fade-in', '');
+                            // console.log('add fusing2');
+                            document.getElementById('cursor').setAttribute('add-fusing', '');
+                            // document.getElementById('box-2').removeAttribute('fade-out');
+                            // document.getElementById('box-2').setAttribute('fade-in', '');
                             notMovingTimer = 0;
                         }
                     } else {
@@ -40,6 +42,7 @@
                         ++movingTimer;
                         notMovingTimer = 0;
                         document.getElementById('box-2').removeAttribute('fade-in');
+                        // document.getElementById('cursor').removeAttribute('add-fusing');
                         if (movingTimer >= 2) {
                             document.getElementById('box-2').setAttribute('fade-out', '');
                             movingTimer = 0;
@@ -77,14 +80,14 @@
                 rotation = document.getElementById('camera').object3D.rotation;
                 // Math formula might change depending on where the menu should appear.
                 // TODO Menu appears on top when looking at top. ???
-                if (Math.abs(position.y/3.0) >= 1.0) {
+                if (Math.abs(position.y / 3.0) >= 1.0) {
                     console.log('above');
                     document.getElementById('box-2').object3D.position.set(position2.x, position2.y, position2.z);
-                    document.getElementById('box-2').object3D.rotation.set(Math.asin(position2.y/3), rotation.y, rotation.z);
-                }else {
+                    document.getElementById('box-2').object3D.rotation.set(Math.asin(position2.y / 3), rotation.y, rotation.z);
+                } else {
                     console.log('below');
                     document.getElementById('box-2').object3D.position.set(position.x, position.y, position.z);
-                    document.getElementById('box-2').object3D.rotation.set(-Math.asin(-position.y/3), rotation.y, rotation.z);
+                    document.getElementById('box-2').object3D.rotation.set(-Math.asin(-position.y / 3), rotation.y, rotation.z);
                 }
                 // this.el.addEventListener('mouseenter', () => {
                 //     console.log('enter');
@@ -96,34 +99,34 @@
             }
         })
 
-        AFRAME.registerComponent('hey-listen', {
-            init: function () {
-                this.el.addEventListener('mouseenter', () => {
-                    console.log('enter');
-                    document.getElementById('box-2').setAttribute('material', 'opacity: 1.0');
-                    document.getElementById('box-2').removeAttribute('fade-out');
-                    document.getElementById('camera').removeAttribute('camera-reader');
-                });
-                this.el.addEventListener('mouseleave', () => {
-                    console.log('leave');
-                    document.getElementById('box-2').setAttribute('material', 'opacity: 0.0');
-                    document.getElementById('camera').setAttribute('camera-reader', '');
-                });
-            },
-            remove: function () {
-                this.el.removeEventListener('mouseenter', () => {
-                    console.log('remove mouseenter');
-                });
-                this.el.removeEventListener('mouseleave', () => {
-                    console.log('remove mouseleave');
-                });
-            }
-        })
+        // AFRAME.registerComponent('hey-listen', {
+        //     init: function () {
+        //         this.el.addEventListener('mouseenter', () => {
+        //             console.log('enter');
+        //             document.getElementById('box-2').setAttribute('material', 'opacity: 1.0');
+        //             document.getElementById('box-2').removeAttribute('fade-out');
+        //             document.getElementById('camera').removeAttribute('camera-reader');
+        //         });
+        //         this.el.addEventListener('mouseleave', () => {
+        //             console.log('leave');
+        //             document.getElementById('box-2').setAttribute('material', 'opacity: 0.0');
+        //             document.getElementById('camera').setAttribute('camera-reader', '');
+        //         });
+        //     },
+        //     remove: function () {
+        //         this.el.removeEventListener('mouseenter', () => {
+        //             console.log('remove mouseenter');
+        //         });
+        //         this.el.removeEventListener('mouseleave', () => {
+        //             console.log('remove mouseleave');
+        //         });
+        //     }
+        // })
 
         /********************************************* NOMADS logo animation *********************************************/
         AFRAME.registerComponent('tl-ring-animation', {
             init: function () {
-                document.getElementById('cursorToggle').setAttribute('visible', 'false');
+                // document.getElementById('cursorToggle').setAttribute('visible', 'false');
                 this.el.setAttribute('animation', 'property: theta-length; to: 360; easing: easeInQuad;');
                 this.el.addEventListener('animationcomplete', () => {
                     this.el.removeAttribute('tl-ring-animation');
@@ -166,7 +169,7 @@
                     document.getElementById('tr-ring').setAttribute('theta-length', '1');
                     document.getElementById('bl-ring').setAttribute('theta-length', '1');
                     document.getElementById('br-ring').setAttribute('theta-length', '1');
-
+                    document.getElementById('box-2').setAttribute('fade-in', '');
                     this.el.removeAttribute('bl-ring-animation');
                     // document.getElementById('box-2').setAttribute('fade-in', '');
                 });
@@ -176,61 +179,27 @@
             }
         });
 
-
-        AFRAME.registerComponent('cursor-fusing', {
-            init: function () {
-                this.el.addEventListener('fusing', () => {
-                    document.getElementById('tl-ring').setAttribute('tl-ring-animation', '');
-                })
-            },
-            remove: function () {
-                this.el.removeEventListener('fusing', () => {
-                    console.log('removing event listener fusing');
-                    document.getElementById('tl-ring').removeAttribute('tl-ring-animation');
-                });
-            }
-        });
         AFRAME.registerComponent('add-fusing', {
             init: function () {
-                // this.el.setAttribute('cursor-fusing');
-                this.el.setAttribute('fuse', 'true');
-                this.el.setAttribute('fuseTimeout', '2000');
+                // console.log('add-fusing');
+                this.el.setAttribute('cursor', 'fuse: true; fuseTimeout: 1500');
+                // console.log('add-fusing2');
                 this.el.addEventListener('click', () => {
+                    // this.el.removeAttribute('cursor');
                     document.getElementById('tl-ring').setAttribute('tl-ring-animation', '');
-                    console.log('fusing');
+                    // console.log('fused');
                 })
             },
             remove: function () {
-                this.el.setAttribute('fuse', 'false');
-                this.el.removeEventListener('click', () => {
-                    console.log('removing event listener fusing');
-                    // document.getElementById('tl-ring').removeAttribute('tl-ring-animation');
-                });
+                console.log('remove add-fusing');
+                this.el.removeAttribute('cursor');
+                // this.el.removeEventListener('click', () => {
+                //     console.log('removing event listener fusing');
+                //     // document.getElementById('tl-ring').removeAttribute('tl-ring-animation');
+                // });
             }
         })
 
-    </script>
-    <script>
-        document.addEventListener('keydown', (e) => {
-            if (e.key == 'a') {
-                // console.log('key press');
-                // console.log(document.getElementById('tl-ring').getAttribute('animation'));
-                // console.log(document.getElementById('tr-ring').getAttribute('animation'));
-                // console.log(document.getElementById('br-ring').getAttribute('animation'));
-                // console.log(document.getElementById('bl-ring').getAttribute('animation'));
-                if (
-                    document.getElementById('tl-ring').getAttribute('animation') == null &&
-                    document.getElementById('tr-ring').getAttribute('animation') == null &&
-                    document.getElementById('br-ring').getAttribute('animation') == null &&
-                    document.getElementById('bl-ring').getAttribute('animation') == null
-                    ) {
-                        console.log('no animation playing');
-                        document.getElementById('tl-ring').setAttribute('tl-ring-animation', '');
-                    }else {
-                        console.log('animation playing, please wait');
-                    }
-            }
-        })
     </script>
 
     <a-scene background="color: #FAFAFA">
@@ -239,14 +208,21 @@
                 position="0 -1 -3" scale="0.0 0.0 0.0" rotation="0 0 0" shadow></a-entity>
             <a-entity geometry="primitive: plane;" material="color: green; transparent:true; opacity: 0.0;" id="box2"
                 position="0 1 -3" scale="0.0 0.0 0.0" rotation="0 0 0" shadow></a-entity>
-            <a-cursor id="cursorToggle"></a-cursor>
+            <!-- <a-entity position="0 0 -1" geometry="primitive: ring; radiusOuter: 0.03; radiusInner: 0.02;"
+                material="color: black; shader: flat;" id="cursor">
+            </a-entity> -->
+            <a-cursor id="cursor"></a-cursor>
         </a-entity>
         <!-- Changing size of rings needs to re-adjust position also -->
         <a-plane position="0 0 -1.01" material="color: red">
-            <a-ring id="tl-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1" position="-0.015 0 0.05" tl-ring-animation></a-ring>
-            <a-ring id="tr-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1" position="0.015 0 0.05"></a-ring>
-            <a-ring id="bl-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1" position="-0.015 -0.03 0.05"></a-ring>
-            <a-ring id="br-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1" position="0.015 -0.03 0.05"></a-ring>
+            <a-ring id="tl-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1"
+                position="-0.015 0 0.05"></a-ring>
+            <a-ring id="tr-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1"
+                position="0.015 0 0.05"></a-ring>
+            <a-ring id="bl-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1"
+                position="-0.015 -0.03 0.05"></a-ring>
+            <a-ring id="br-ring" color="blue" radius-inner="0.01" radius-outer="0.015" theta-length="1"
+                position="0.015 -0.03 0.05"></a-ring>
         </a-plane>
         <a-entity geometry="primitive: plane;" material="color: blue; transparent: true; opacity: 0.0;" id="box-2"
             rotation="0 0 0" position="0 -1 -3"></a-entity>
@@ -257,7 +233,28 @@
         <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
         <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
     </a-scene>
-
+    <script>
+            document.addEventListener('keydown', (e) => {
+                if (e.key == 'a') {
+                    // console.log('key press');
+                    // console.log(document.getElementById('tl-ring').getAttribute('animation'));
+                    // console.log(document.getElementById('tr-ring').getAttribute('animation'));
+                    // console.log(document.getElementById('br-ring').getAttribute('animation'));
+                    // console.log(document.getElementById('bl-ring').getAttribute('animation'));
+                    if (
+                        document.getElementById('tl-ring').getAttribute('animation') == null &&
+                        document.getElementById('tr-ring').getAttribute('animation') == null &&
+                        document.getElementById('br-ring').getAttribute('animation') == null &&
+                        document.getElementById('bl-ring').getAttribute('animation') == null
+                    ) {
+                        // console.log('no animation playing');
+                        document.getElementById('tl-ring').setAttribute('tl-ring-animation', '');
+                    } else {
+                        // console.log('animation playing, please wait');
+                    }
+                }
+            });
+        </script>
 </body>
 
 </html>
